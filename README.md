@@ -20,54 +20,6 @@ UC Berkeley and Adobe Research
 - The author used PyTorch 1.7.1 on Python 3.6
 - Install dependencies with `pip install dominate torchgeometry func-timeout tqdm matplotlib opencv_python lmdb numpy GPUtil Pillow scikit-learn visdom`
 
-## Datasets
-
-- *LSUN Church and Bedroom* datasets can be downloaded [here](https://github.com/fyu/lsun). Once downloaded and unzipped, the directories should contain `[category]_[train/val]_lmdb/`.
-- [*FFHQ datasets*](https://github.com/NVlabs/ffhq-dataset) can be downloaded using this [link](https://drive.google.com/file/d/1WvlAIvuochQn_L_f9p3OdFdTiSLlnnhv/view?usp=sharing). This is the zip file of 70,000 images at 1024x1024 resolution. Unzip the files, and we will load the image files directly.
-- The *Flickr Mountains* dataset and the *Flickr Waterfall* dataset are not sharable due to license issues. But the images were scraped from [Mountains Anywhere](https://flickr.com/groups/62119907@N00/) and [Waterfalls Around the World](https://flickr.com/groups/52241685729@N01/), using the [Python wrapper for the Flickr API](https://github.com/alexis-mignon/python-flickr-api). Please contact [Taesung Park](http://taesung.me/) with title "Flickr Dataset for Swapping Autoencoder" for more details.
-
-## Running training.
-
-The training configurations are specified using the scripts in `experiments/*_launcher.py`. Use the following commands to launch various trainings.
-
-```bash
-# Modify |dataroot| and |checkpoints_dir| at
-# experiments/[church,bedroom,ffhq,mountain]_launcher.py
-python -m experiments church train church_default
-python -m experiments bedroom train bedroom_default
-python -m experiments ffhq train ffhq512_default
-python -m experiments ffhq train ffhq1024_default
-
-# By default, the script uses GPUtil to look at available GPUs
-# on the machine and sets appropriate GPU IDs. To specify specific set of GPUs,
-# use the |--gpu| option. Be sure to also change |num_gpus| option in the corresponding script.
-python -m experiments church train church_default --gpu 01234567
-
-```
-
-The training progress can be monitored using `visdom` at the port number specified by `--display_port`. The default is https://localhost:2004.
-
-Additionally, a few swapping grids are generated using random samples of the training set.
-They are saved as webpages at `[checkpoints_dir]/[expr_name]/snapshots/`.
-The frequency of the grid generation is controlled using `--evaluation_freq`.
-
-All configurable parameters are printed at the beginning of training. These configurations are spreaded throughout the codes in `def modify_commandline_options` of relevant classes, such as `models/swapping_autoencoder_model.py`, `util/iter_counter.py`, or `models/networks/encoder.py`. To change these configuration, simply modify the corresponding option in `opt.specify` of the training script.
-
-The code for parsing and configurations are at `experiments/__init__.py, experiments/__main__.py, experiments/tmux_launcher.py`.
-
-### Continuing training.
-
-The training continues by default from the last checkpoint, because the `--continue_train` option is set True by default.
-To start from scratch, remove the checkpoint, or specify `continue_train=False` in the training script (e.g. `experiments/church_launcher.py`).
-
-## Code Structure (Main Functions)
-
-- `models/swapping_autoencoder_model.py`: The core file that defines losses, produces visuals.
-- `optimizers/swapping_autoencoder_optimizer.py`: Defines the optimizers and alternating training of GAN.
-- `models/networks/`: contains the model architectures `generator.py`, `discriminator.py`, `encoder.py`, `patch_discrimiantor.py`, `stylegan2_layers.py`.
-- `options/__init__.py`: contains basic option flags. BUT many important flags are spread out over files, such as `swapping_autoencoder_model.py` or `generator.py`. When the program starts, these options are all parsed together. The best way to check the used option list is to run the training script, and look at the console output of the configured options.
-- `util/iter_counter.py`: contains iteration counting.
-
 ## Testing and Evaluation.
 
 We provide the pretrained models and also several images that reproduce the figures of the paper. Please download and unzip them [here (2.1GB)](http://efrosgans.eecs.berkeley.edu/SwappingAutoencoder/swapping_autoencoder_models_and_test_images.zip). The scripts assume that the checkpoints are at `./checkpoints/`, and the test images at `./testphotos/`, but they can be changed by modifying `--checkpoints_dir` and `--dataroot` options.
@@ -131,6 +83,56 @@ python -m experiments ffhq1024_pretrained run_test swapping_for_eval
 The results can be viewed at `./results` (that can be changed using `--result_dir` option).
 
 The FID is then computed between the swapped images and the original structure images, using https://github.com/mseitzer/pytorch-fid.
+
+## Running training.
+
+### Datasets
+
+- *LSUN Church and Bedroom* datasets can be downloaded [here](https://github.com/fyu/lsun). Once downloaded and unzipped, the directories should contain `[category]_[train/val]_lmdb/`.
+- [*FFHQ datasets*](https://github.com/NVlabs/ffhq-dataset) can be downloaded using this [link](https://drive.google.com/file/d/1WvlAIvuochQn_L_f9p3OdFdTiSLlnnhv/view?usp=sharing). This is the zip file of 70,000 images at 1024x1024 resolution. Unzip the files, and we will load the image files directly.
+- The *Flickr Mountains* dataset and the *Flickr Waterfall* dataset are not sharable due to license issues. But the images were scraped from [Mountains Anywhere](https://flickr.com/groups/62119907@N00/) and [Waterfalls Around the World](https://flickr.com/groups/52241685729@N01/), using the [Python wrapper for the Flickr API](https://github.com/alexis-mignon/python-flickr-api). Please contact [Taesung Park](http://taesung.me/) with title "Flickr Dataset for Swapping Autoencoder" for more details.
+
+### Training scripts
+
+The training configurations are specified using the scripts in `experiments/*_launcher.py`. Use the following commands to launch various trainings.
+
+```bash
+# Modify |dataroot| and |checkpoints_dir| at
+# experiments/[church,bedroom,ffhq,mountain]_launcher.py
+python -m experiments church train church_default
+python -m experiments bedroom train bedroom_default
+python -m experiments ffhq train ffhq512_default
+python -m experiments ffhq train ffhq1024_default
+
+# By default, the script uses GPUtil to look at available GPUs
+# on the machine and sets appropriate GPU IDs. To specify specific set of GPUs,
+# use the |--gpu| option. Be sure to also change |num_gpus| option in the corresponding script.
+python -m experiments church train church_default --gpu 01234567
+
+```
+
+The training progress can be monitored using `visdom` at the port number specified by `--display_port`. The default is https://localhost:2004.
+
+Additionally, a few swapping grids are generated using random samples of the training set.
+They are saved as webpages at `[checkpoints_dir]/[expr_name]/snapshots/`.
+The frequency of the grid generation is controlled using `--evaluation_freq`.
+
+All configurable parameters are printed at the beginning of training. These configurations are spreaded throughout the codes in `def modify_commandline_options` of relevant classes, such as `models/swapping_autoencoder_model.py`, `util/iter_counter.py`, or `models/networks/encoder.py`. To change these configuration, simply modify the corresponding option in `opt.specify` of the training script.
+
+The code for parsing and configurations are at `experiments/__init__.py, experiments/__main__.py, experiments/tmux_launcher.py`.
+
+### Continuing training.
+
+The training continues by default from the last checkpoint, because the `--continue_train` option is set True by default.
+To start from scratch, remove the checkpoint, or specify `continue_train=False` in the training script (e.g. `experiments/church_launcher.py`).
+
+## Code Structure (Main Functions)
+
+- `models/swapping_autoencoder_model.py`: The core file that defines losses, produces visuals.
+- `optimizers/swapping_autoencoder_optimizer.py`: Defines the optimizers and alternating training of GAN.
+- `models/networks/`: contains the model architectures `generator.py`, `discriminator.py`, `encoder.py`, `patch_discrimiantor.py`, `stylegan2_layers.py`.
+- `options/__init__.py`: contains basic option flags. BUT many important flags are spread out over files, such as `swapping_autoencoder_model.py` or `generator.py`. When the program starts, these options are all parsed together. The best way to check the used option list is to run the training script, and look at the console output of the configured options.
+- `util/iter_counter.py`: contains iteration counting.
 
 ## Bibtex
 If you use this code for your research, please cite our paper:
