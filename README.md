@@ -40,7 +40,7 @@ python -m experiments ffhq train ffhq1024_default
 
 # By default, the script uses GPUtil to look at available GPUs 
 # on the machine and sets appropriate GPU IDs. To specify specific set of GPUs,
-# use the |--gpu| option. For example,
+# use the |--gpu| option. Be sure to also change |num_gpus| option in the corresponding script.
 python -m experiments church train church_default --gpu 01234567
 
 ```
@@ -76,6 +76,7 @@ We provide the pretrained models and also several images that reproduce the figu
 To run simple swapping and interpolation, specify the two input reference images, change `input_structure_image` and `input_texture_image` fields of
 `experiments/mountain_pretrained_launcher.py`, and run
 ```bash
+python -m experiments mountain_pretrained test simple_swapping
 python -m experiments mountain_pretrained test simple_interpolation
 ```
 
