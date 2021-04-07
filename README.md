@@ -7,7 +7,7 @@ UC Berkeley and Adobe Research
 ![teaser](https://taesung.me/SwappingAutoencoder/index_files/teaser_v3.jpg)
 <p float="left">
   <img src="https://taesung.me/SwappingAutoencoder/index_files/church_style_swaps.gif" height="190" />
-  <img src="https://taesung.me/SwappingAutoencoder/index_files/tree_smaller.gif" height="190" /> 
+  <img src="https://taesung.me/SwappingAutoencoder/index_files/tree_smaller.gif" height="190" />
   <img src="https://taesung.me/SwappingAutoencoder/index_files/horseshoe_bend_evensmaller.gif" height="190" />
 </p>
 
@@ -22,23 +22,23 @@ UC Berkeley and Adobe Research
 
 ## Datasets
 
-- *LSUN Church and Bedroom* datasets can be downloaded [here](https://github.com/fyu/lsun). Once downloaded and unzipped, the directories should contain `[category]_[train/val]_lmdb/`. 
-- [*FFHQ datasets*](https://github.com/NVlabs/ffhq-dataset) can be downloaded using this [link](https://drive.google.com/file/d/1WvlAIvuochQn_L_f9p3OdFdTiSLlnnhv/view?usp=sharing). This is the zip file of 70,000 images at 1024x1024 resolution. Unzip the files, and we will load the image files directly. 
-- The *Flickr Mountains* dataset and the *Flickr Waterfall* dataset are not sharable due to license issues. But the images were scraped from [Mountains Anywhere](https://flickr.com/groups/62119907@N00/) and [Waterfalls Around the World](https://flickr.com/groups/52241685729@N01/), using the [Python wrapper for the Flickr API](https://github.com/alexis-mignon/python-flickr-api). Please contact [Taesung Park](http://taesung.me/) with title "Flickr Dataset for Swapping Autoencoder" for more details. 
+- *LSUN Church and Bedroom* datasets can be downloaded [here](https://github.com/fyu/lsun). Once downloaded and unzipped, the directories should contain `[category]_[train/val]_lmdb/`.
+- [*FFHQ datasets*](https://github.com/NVlabs/ffhq-dataset) can be downloaded using this [link](https://drive.google.com/file/d/1WvlAIvuochQn_L_f9p3OdFdTiSLlnnhv/view?usp=sharing). This is the zip file of 70,000 images at 1024x1024 resolution. Unzip the files, and we will load the image files directly.
+- The *Flickr Mountains* dataset and the *Flickr Waterfall* dataset are not sharable due to license issues. But the images were scraped from [Mountains Anywhere](https://flickr.com/groups/62119907@N00/) and [Waterfalls Around the World](https://flickr.com/groups/52241685729@N01/), using the [Python wrapper for the Flickr API](https://github.com/alexis-mignon/python-flickr-api). Please contact [Taesung Park](http://taesung.me/) with title "Flickr Dataset for Swapping Autoencoder" for more details.
 
 ## Running training.
 
-The training configurations are specified using the scripts in `experiments/*_launcher.py`. Use the following commands to launch various trainings. 
+The training configurations are specified using the scripts in `experiments/*_launcher.py`. Use the following commands to launch various trainings.
 
 ```bash
-# Modify |dataroot| and |checkpoints_dir| at 
-# experiments/[church,bedroom,ffhq,mountain]_launcher.py 
+# Modify |dataroot| and |checkpoints_dir| at
+# experiments/[church,bedroom,ffhq,mountain]_launcher.py
 python -m experiments church train church_default
 python -m experiments bedroom train bedroom_default
 python -m experiments ffhq train ffhq512_default
 python -m experiments ffhq train ffhq1024_default
 
-# By default, the script uses GPUtil to look at available GPUs 
+# By default, the script uses GPUtil to look at available GPUs
 # on the machine and sets appropriate GPU IDs. To specify specific set of GPUs,
 # use the |--gpu| option. Be sure to also change |num_gpus| option in the corresponding script.
 python -m experiments church train church_default --gpu 01234567
@@ -47,30 +47,30 @@ python -m experiments church train church_default --gpu 01234567
 
 The training progress can be monitored using `visdom` at the port number specified by `--display_port`. The default is https://localhost:2004.
 
-Additionally, a few swapping grids are generated using random samples of the training set. 
-They are saved as webpages at `[checkpoints_dir]/[expr_name]/snapshots/`. 
+Additionally, a few swapping grids are generated using random samples of the training set.
+They are saved as webpages at `[checkpoints_dir]/[expr_name]/snapshots/`.
 The frequency of the grid generation is controlled using `--evaluation_freq`.
 
-All configurable parameters are printed at the beginning of training. These configurations are spreaded throughout the codes in `def modify_commandline_options` of relevant classes, such as `models/swapping_autoencoder_model.py`, `util/iter_counter.py`, or `models/networks/encoder.py`. To change these configuration, simply modify the corresponding option in `opt.specify` of the training script. 
+All configurable parameters are printed at the beginning of training. These configurations are spreaded throughout the codes in `def modify_commandline_options` of relevant classes, such as `models/swapping_autoencoder_model.py`, `util/iter_counter.py`, or `models/networks/encoder.py`. To change these configuration, simply modify the corresponding option in `opt.specify` of the training script.
 
 The code for parsing and configurations are at `experiments/__init__.py, experiments/__main__.py, experiments/tmux_launcher.py`.
 
-### Continuing training. 
+### Continuing training.
 
-The training continues by default from the last checkpoint, because the `--continue_train` option is set True by default. 
-To start from scratch, remove the checkpoint, or specify `continue_train=False` in the training script (e.g. `experiments/church_launcher.py`). 
+The training continues by default from the last checkpoint, because the `--continue_train` option is set True by default.
+To start from scratch, remove the checkpoint, or specify `continue_train=False` in the training script (e.g. `experiments/church_launcher.py`).
 
-## Core codes to get started to browse the code repo. 
+## Code Structure (Main Functions)
 
-- `models/swapping_autoencoder_model.py`: The core file that defines losses, produces visuals. 
-- `optimizers/swapping_autoencoder_optimizer.py`: Defines the optimizers and alternating training of GAN. 
+- `models/swapping_autoencoder_model.py`: The core file that defines losses, produces visuals.
+- `optimizers/swapping_autoencoder_optimizer.py`: Defines the optimizers and alternating training of GAN.
 - `models/networks/`: contains the model architectures `generator.py`, `discriminator.py`, `encoder.py`, `patch_discrimiantor.py`, `stylegan2_layers.py`.
-- `options/__init__.py`: contains basic option flags. BUT many important flags are spreaded out over files, such as `swapping_autoencoder_model.py` or `generator.py`. At start up, these options are all parsed together. The best way to check the used option list is to run the training script, and look at the console output of the configured options.
+- `options/__init__.py`: contains basic option flags. BUT many important flags are spread out over files, such as `swapping_autoencoder_model.py` or `generator.py`. When the program starts, these options are all parsed together. The best way to check the used option list is to run the training script, and look at the console output of the configured options.
 - `util/iter_counter.py`: contains iteration counting.
 
-## Testing and Evaluation. 
+## Testing and Evaluation.
 
-We provide the pretrained models and also several images that reproduce the figures of the paper. Please download and unzip them [here (2.1GB)](http://efrosgans.eecs.berkeley.edu/SwappingAutoencoder/swapping_autoencoder_models_and_test_images.zip). The scripts assume that the checkpoints are at `./checkpoints/`, and the test images at `./testphotos/`, but they can be changed by modifying `--checkpoints_dir` and `--dataroot` options. 
+We provide the pretrained models and also several images that reproduce the figures of the paper. Please download and unzip them [here (2.1GB)](http://efrosgans.eecs.berkeley.edu/SwappingAutoencoder/swapping_autoencoder_models_and_test_images.zip). The scripts assume that the checkpoints are at `./checkpoints/`, and the test images at `./testphotos/`, but they can be changed by modifying `--checkpoints_dir` and `--dataroot` options.
 
 ### Swapping and Interpolation of the mountain model using sample images
 To run simple swapping and interpolation, specify the two input reference images, change `input_structure_image` and `input_texture_image` fields of
@@ -91,7 +91,7 @@ python test.py --evaluation_metrics simple_swapping \
 --texture_mix_alpha 0.0 0.25 0.5 0.75 1.0
 ```
 
-In other words, feel free to use this command if that feels more straightforward. 
+In other words, feel free to use this command if that feels more straightforward.
 
 The output images are saved at `./results/mountain_pretrained/simpleswapping/`.
 
@@ -100,27 +100,27 @@ The output images are saved at `./results/mountain_pretrained/simpleswapping/`.
 To replicate Figure 4, 9, and 12 of the paper, run
 ```bash
 
-# Reads options from ./experiments/church_pretrained_launcher.py 
+# Reads options from ./experiments/church_pretrained_launcher.py
 python -m experiments church_pretrained test swapping_grid
 
-# Reads options from ./experiments/bedroom_pretrained_launcher.py 
+# Reads options from ./experiments/bedroom_pretrained_launcher.py
 python -m experiments bedroom_pretrained test swapping_grid
 
-# Reads options from ./experiments/mountain_pretrained_launcher.py 
+# Reads options from ./experiments/mountain_pretrained_launcher.py
 python -m experiments mountain_pretrained test swapping_grid
 
-# Reads options from ./experiments/ffhq512_pretrained_launcher.py 
+# Reads options from ./experiments/ffhq512_pretrained_launcher.py
 python -m experiments ffhq512_pretrained test swapping_grid
 ```
 
-Make sure the `dataroot` and `checkpoints_dir` paths are correctly set in 
+Make sure the `dataroot` and `checkpoints_dir` paths are correctly set in
 the respective `./experiments/xx_pretrained_launcher.py` script.
 
 ### Images used for evaluation in Table 1, Fig 5, and Table 2
 
-To generate images used for quantitative evaluations such as FID, you first need to prepare pairs of input structure and texture references images. 
+To generate images used for quantitative evaluations such as FID, you first need to prepare pairs of input structure and texture references images.
 
-The reference images are randomly selected from the val set of LSUN, FFHQ and the Waterfalls dataset. The pairs of input structure and texture images should be located at `input_structure/` and `input_style/` directory, with the same file name. For example, `input_structure/001.png` and `input_style/001.png` will be loaded together for swapping. 
+The reference images are randomly selected from the val set of LSUN, FFHQ, and the Waterfalls dataset. The pairs of input structure and texture images should be located at `input_structure/` and `input_style/` directory, with the same file name. For example, `input_structure/001.png` and `input_style/001.png` will be loaded together for swapping.
 
 Replace the path to the test images at `dataroot="./testphotos/church/fig5_tab2/"` field of the script `experiments/church_pretrained_launcher.py`, and run
 ```bash
@@ -132,7 +132,16 @@ The results can be viewed at `./results` (that can be changed using `--result_di
 
 The FID is then computed between the swapped images and the original structure images, using https://github.com/mseitzer/pytorch-fid.
 
-## Acknowledgement
+## Bibtex
+If you use this code for your research, please cite our paper:
+```
+@inproceedings{park2020swapping,
+  title={Swapping Autoencoder for Deep Image Manipulation},
+  author={Park, Taesung and Zhu, Jun-Yan and Wang, Oliver and Lu, Jingwan and Shechtman, Eli and Efros, Alexei A. and Zhang, Richard},
+  booktitle={Advances in Neural Information Processing Systems},
+  year={2020}
+}
+```
+## Acknowledgment
 
-The StyleGAN2 layers heavily borrows (or rather, directly copies!) the PyTorch implementation of [@rosinality](https://github.com/rosinality/stylegan2-pytorch). We thank Nicholas Kolkin for the helpful discussion on the automated content and style evaluation, Jeongo Seo and Yoseob Kim for advice on the user interface, and William T.
-Peebles, Tongzhou Wang, and Yu Sun for the discussion on disentanglement.
+The StyleGAN2 layers heavily borrows (or rather, directly copies!) the PyTorch implementation of [@rosinality](https://github.com/rosinality/stylegan2-pytorch). We thank Nicholas Kolkin for the helpful discussion on the automated content and style evaluation, Jeongo Seo and Yoseob Kim for advice on the user interface, and William T. Peebles, Tongzhou Wang, and Yu Sun for the discussion on disentanglement.
