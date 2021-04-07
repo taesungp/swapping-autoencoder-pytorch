@@ -258,7 +258,7 @@ def visualize_spatial_code(sp):
 def blank_tensor(w, h):
     return torch.ones(1, 3, h, w)
 
-        
+
 
 class RandomSpatialTransformer:
     def __init__(self, opt, bs):
@@ -269,7 +269,7 @@ class RandomSpatialTransformer:
     def create_affine_transformation(self, ref, rot, sx, sy, tx, ty):
         return torch.stack([-ref * sx * torch.cos(rot), -sy * torch.sin(rot), tx,
                             -ref * sx * torch.sin(rot), sy * torch.cos(rot), ty], axis=1)
-        
+
     def resample_transformation(self, bs, device, reflection=None, rotation=None, scale=None, translation=None):
         dev = device
         zero = torch.zeros((bs), device=dev)
@@ -306,9 +306,9 @@ class RandomSpatialTransformer:
         A = torch.stack([ref * sx * torch.cos(rot), -sy * torch.sin(rot), tx,
                          ref * sx * torch.sin(rot), sy * torch.cos(rot), ty], axis=1)
         return A.view(bs, 2, 3)
-        
-        
-        
+
+
+
     def forward_transform(self, x, size):
         if type(x) == list:
             return [self.forward_transform(xx) for xx in x]
@@ -339,7 +339,7 @@ def apply_random_crop(x, target_size, scale_range, num_crops=1, return_rect=Fals
     #crops.append(crop)
     #crop = torch.stack(crops, dim=1)
     crop = crop.view(B // num_crops, num_crops, crop.size(1), crop.size(2), crop.size(3))
-    
+
     return crop
 
 
@@ -406,9 +406,9 @@ def five_crop(x):
     crop = crop.view(B // num_crops, num_crops, crop.size(1), crop.size(2), crop.size(3))
 
     return crop
-    
-    
-    
+
+
+
 
 
 def compute_similarity_logit(x, y, p=1, compute_interdistances=True):
@@ -581,4 +581,3 @@ class GaussianSmoothing(nn.Module):
         """
         x = F.pad(input, [self.pad_size] * 4, mode="reflect")
         return self.conv(x, weight=self.weight, groups=self.groups)
-

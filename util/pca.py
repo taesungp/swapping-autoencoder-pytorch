@@ -5,6 +5,7 @@ import util
 
 np.set_printoptions(precision=4, suppress=True, edgeitems=10)
 
+
 class PCA:
     def __init__(self, X, ndim=128, var_fraction=0.99, l2_normalized=True, first_direction=None):
 
@@ -38,7 +39,6 @@ class PCA:
         self.inv_proj = V.transpose(0, 1)
         self.N = X.size(0)
 
-
     def project(self, x):
         if self.l2_normalized:
             last_dim = x[:, -1:]
@@ -54,7 +54,7 @@ class PCA:
         return self.sinvals / np.sqrt(self.N)
 
     def pc(self, idx):
-        #return self.inv_proj[idx:idx + 1] * (self.std * np.sqrt(self.inv_proj.size(1)))
+        # return self.inv_proj[idx:idx + 1] * (self.std * np.sqrt(self.inv_proj.size(1)))
         return self.inv_proj[idx:idx + 1]
 
     def inverse(self, z):

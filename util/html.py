@@ -61,8 +61,6 @@ class HTML:
         input_is_path = type(ims[0]) == str
         if not input_is_path:  # input is PIL Image
             assert type(ims[0]) == Image.Image
-            #if width is None:
-            #    width = ims[0].size[0]
             paths = []
             for im, name in zip(ims, txts):
                 if "." not in name[-5:]:

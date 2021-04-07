@@ -54,7 +54,7 @@ class BaseModel(torch.nn.Module):
             return
         state_dict = torch.load(checkpoint_path,
                                 map_location=str(self.device))
-        #self.load_state_dict(state_dict)
+        # self.load_state_dict(state_dict)
         own_state = self.state_dict()
         skip_all = False
         for name, own_param in own_state.items():
@@ -63,7 +63,7 @@ class BaseModel(torch.nn.Module):
             if name not in state_dict:
                 print("Key %s does not exist in checkpoint. Skipping..." % name)
                 continue
-            #if name.startswith("C.net"):
+            # if name.startswith("C.net"):
             #    continue
             param = state_dict[name]
             if own_param.shape != param.shape:
@@ -121,4 +121,3 @@ class BaseModel(torch.nn.Module):
             return method(*args, **kwargs)
         else:
             raise ValueError(command)
-

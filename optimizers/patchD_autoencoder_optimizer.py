@@ -80,7 +80,7 @@ class PatchDAutoencoderOptimizer(BaseOptimizer):
         self.set_requires_grad(self.Gparams, False)
         self.num_discriminator_iters += 1
         self.optimizer_D.zero_grad()
-        
+
         d_losses, d_metrics, features = self.model(images,
                                                    command="compute_discriminator_losses")
         nce_losses, nce_metrics = self.model.singlegpu_model(*features,

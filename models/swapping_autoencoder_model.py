@@ -16,8 +16,8 @@ class SwappingAutoencoderModel(BaseModel):
         parser.add_argument("--lambda_L1", default=1.0, type=float)
         parser.add_argument("--lambda_GAN", default=1.0, type=float)
         parser.add_argument("--lambda_PatchGAN", default=1.0, type=float)
-        parser.add_argument("--patch_min_scale", default=1/8, type=float)
-        parser.add_argument("--patch_max_scale", default=1/4, type=float)
+        parser.add_argument("--patch_min_scale", default=1 / 8, type=float)
+        parser.add_argument("--patch_max_scale", default=1 / 4, type=float)
         parser.add_argument("--patch_num_crops", default=8, type=int)
         parser.add_argument("--patch_use_aggregation",
                             type=util.str2bool, default=True)
@@ -122,7 +122,7 @@ class SwappingAutoencoderModel(BaseModel):
 
         # To save memory, compute the GAN loss on only
         # half of the reconstructed images
-        rec = self.G(sp[:B//2], gl[:B//2])
+        rec = self.G(sp[:B // 2], gl[:B // 2])
         mix = self.G(self.swap(sp), gl)
 
         losses = self.compute_image_discriminator_losses(real, rec, mix)
@@ -175,7 +175,7 @@ class SwappingAutoencoderModel(BaseModel):
 
             dims = list(range(1, grad_real.ndim))
             grad_crop_penalty = grad_real.pow(2).sum(dims) + \
-                                grad_target.pow(2).sum(dims)
+                grad_target.pow(2).sum(dims)
             grad_crop_penalty *= (0.5 * self.opt.lambda_patch_R1 * 0.5)
         else:
             grad_crop_penalty = 0.0
@@ -189,19 +189,19 @@ class SwappingAutoencoderModel(BaseModel):
         B = real.size(0)
 
         sp, gl = self.E(real)
-        rec = self.G(sp[:B//2], gl[:B//2])  # only on B//2 to save memory
+        rec = self.G(sp[:B // 2], gl[:B // 2])  # only on B//2 to save memory
         sp_mix = self.swap(sp)
 
         if self.opt.crop_size >= 1024:
             # another momery-saving trick: reduce #outputs to save memory
-            real = real[B//2:]
-            gl = gl[B//2:]
-            sp_mix = sp_mix[B//2:]
+            real = real[B // 2:]
+            gl = gl[B // 2:]
+            sp_mix = sp_mix[B // 2:]
 
         mix = self.G(sp_mix, gl)
 
         # record the error of the reconstructed images for monitoring purposes
-        metrics["L1_dist"] = self.l1_loss(rec, real[:B//2])
+        metrics["L1_dist"] = self.l1_loss(rec, real[:B // 2])
 
         if self.opt.lambda_L1 > 0.0:
             losses["G_L1"] = metrics["L1_dist"] * self.opt.lambda_L1
