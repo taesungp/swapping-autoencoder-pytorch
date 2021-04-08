@@ -32,6 +32,9 @@ UC Berkeley and Adobe Research
 We provide the pretrained models and also several images that reproduce the figures of the paper. Please download and unzip them [here (2.1GB)](http://efrosgans.eecs.berkeley.edu/SwappingAutoencoder/swapping_autoencoder_models_and_test_images.zip). The scripts assume that the checkpoints are at `./checkpoints/`, and the test images at `./testphotos/`, but they can be changed by modifying `--checkpoints_dir` and `--dataroot` options.
 
 ### Swapping and Interpolation of the mountain model using sample images
+
+<img src='imgs/interpolation.png' width="1000px"/>
+
 To run simple swapping and interpolation, specify the two input reference images, change `input_structure_image` and `input_texture_image` fields of
 `experiments/mountain_pretrained_launcher.py`, and run
 ```bash
