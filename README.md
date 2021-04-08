@@ -17,9 +17,9 @@ UC Berkeley and Adobe Research
 ## Overview
 <img src='imgs/overview.jpg' width="1000px"/>
 
-Swapping Autoencoder consists of autoencoding (top) and swapping (bottom) operation.
-  {Top} An encoder E embeds an input (Notre-Dame) into two codes. The structure code is a tensor with spatial dimensions; the texture code is a 2048-dimensional vector. Decoding with generator G should produce a realistic image (enforced by discriminator D matching the input (reconstruction loss).
-  {Bottom} Decoding with the texture code from a second image (Saint Basil's Cathedral) should look realistic (via D) and match the texture of the image, by training with a patch co-occurrence discriminator Dpatch that enforces the output and reference patches look indistinguishable.
+**Swapping Autoencoder** consists of autoencoding (top) and swapping (bottom) operation.
+**Top**: An encoder E embeds an input (Notre-Dame) into two codes. The structure code is a tensor with spatial dimensions; the texture code is a 2048-dimensional vector. Decoding with generator G should produce a realistic image (enforced by discriminator D matching the input (reconstruction loss).
+**Bottom**: Decoding with the texture code from a second image (Saint Basil's Cathedral) should look realistic (via D) and match the texture of the image, by training with a patch co-occurrence discriminator Dpatch that enforces the output and reference patches look indistinguishable.
 
 ## Installation / Requirements
 
