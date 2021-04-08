@@ -14,6 +14,13 @@ UC Berkeley and Adobe Research
 ### [Project page](https://taesung.me/SwappingAutoencoder/) |   [Paper](https://arxiv.org/abs/2007.00653) | [3 Min Video](https://youtu.be/0elW11wRNpg)
 
 
+## Overview
+<img src='imgs/overview.jpg' width="1000px"/>
+
+Swapping Autoencoder consists of autoencoding (top) and swapping (bottom) operation.
+  {Top} An encoder E embeds an input (Notre-Dame) into two codes. The structure code is a tensor with spatial dimensions; the texture code is a 2048-dimensional vector. Decoding with generator G should produce a realistic image (enforced by discriminator D matching the input (reconstruction loss).
+  {Bottom} Decoding with the texture code from a second image (Saint Basil's Cathedral) should look realistic (via D) and match the texture of the image, by training with a patch co-occurrence discriminator Dpatch that enforces the output and reference patches look indistinguishable.
+
 ## Installation / Requirements
 
 - CUDA 10.1 or newer is required because it uses a custom CUDA kernel of [StyleGAN2](https://github.com/NVlabs/stylegan2/), ported by [@rosinality](https://github.com/rosinality/stylegan2-pytorch)
@@ -47,9 +54,13 @@ In other words, feel free to use this command if that feels more straightforward
 
 The output images are saved at `./results/mountain_pretrained/simpleswapping/`.
 
-### Swapping Grid (Fig 4, 9, and 12 of Arxiv)
+### Texture Swapping
 
-To replicate Figure 4, 9, and 12 of the paper, run
+<img src='imgs/swapping.jpg' width="1000px"/>
+Our Swapping Autoencoder learns to disentangle texture from structure for image editing tasks such as texture swapping.  Each row shows the result of combining the structure code of the leftmost image with the texture code of the top image.
+
+To reproduce this image (Figure 4) as well as Figures 9 and 12 of the paper, run
+the following command:
 ```bash
 
 # Reads options from ./experiments/church_pretrained_launcher.py
@@ -68,9 +79,9 @@ python -m experiments ffhq512_pretrained test swapping_grid
 Make sure the `dataroot` and `checkpoints_dir` paths are correctly set in
 the respective `./experiments/xx_pretrained_launcher.py` script.
 
-### Images used for evaluation in Table 1, Fig 5, and Table 2
+### Quantitative Evaluations
 
-To generate images used for quantitative evaluations such as FID, you first need to prepare pairs of input structure and texture references images.
+To perform quantitative evaluation such as FID in Table 1, Fig 5, and Table 2, we first need to prepare image pairs of input structure and texture references images.
 
 The reference images are randomly selected from the val set of LSUN, FFHQ, and the Waterfalls dataset. The pairs of input structure and texture images should be located at `input_structure/` and `input_style/` directory, with the same file name. For example, `input_structure/001.png` and `input_style/001.png` will be loaded together for swapping.
 
@@ -84,7 +95,7 @@ The results can be viewed at `./results` (that can be changed using `--result_di
 
 The FID is then computed between the swapped images and the original structure images, using https://github.com/mseitzer/pytorch-fid.
 
-## Running training.
+## Model Training.
 
 ### Datasets
 
@@ -92,7 +103,7 @@ The FID is then computed between the swapped images and the original structure i
 - [*FFHQ datasets*](https://github.com/NVlabs/ffhq-dataset) can be downloaded using this [link](https://drive.google.com/file/d/1WvlAIvuochQn_L_f9p3OdFdTiSLlnnhv/view?usp=sharing). This is the zip file of 70,000 images at 1024x1024 resolution. Unzip the files, and we will load the image files directly.
 - The *Flickr Mountains* dataset and the *Flickr Waterfall* dataset are not sharable due to license issues. But the images were scraped from [Mountains Anywhere](https://flickr.com/groups/62119907@N00/) and [Waterfalls Around the World](https://flickr.com/groups/52241685729@N01/), using the [Python wrapper for the Flickr API](https://github.com/alexis-mignon/python-flickr-api). Please contact [Taesung Park](http://taesung.me/) with title "Flickr Dataset for Swapping Autoencoder" for more details.
 
-### Training scripts
+### Training Scripts
 
 The training configurations are specified using the scripts in `experiments/*_launcher.py`. Use the following commands to launch various trainings.
 
