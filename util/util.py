@@ -384,33 +384,6 @@ def crop_with_resize(A, crop_rect, return_size):
     return resized
 
 
-def five_crop(x):
-    # build grid
-    num_crops = 5
-    B = x.size(0) * num_crops
-    unit_grid_x = torch.linspace(-1.0, 1.0, target_size, device=x.device)[np.newaxis, np.newaxis, :, np.newaxis].repeat(B, target_size, 1, 1)
-    unit_grid_y = unit_grid_x.transpose(1, 2)
-    unit_grid = torch.cat([unit_grid_x, unit_grid_y], dim=3)
-
-    x = x.unsqueeze(1).expand(-1, num_crops, -1, -1, -1).flatten(0, 1)
-    scale = torch.tensor([2/3], dtype=torch.float32, device=x.device).view(1, 1, 1, 1)
-    offset = torch.tensor([[0, 0],
-                           [0, 1/3],
-                           [1/3, 1/3],
-                           [1/3, 0],
-                           [1/6, 1/6]],
-                          dtype=torch.float32, device=x.device)
-    offset = (offset[:, None, None, :] * 2 - 1) * scale
-    sampling_grid = unit_grid * scale + offset
-    crop = F.grid_sample(x, sampling_grid, align_corners=False)
-    crop = crop.view(B // num_crops, num_crops, crop.size(1), crop.size(2), crop.size(3))
-
-    return crop
-
-
-
-
-
 def compute_similarity_logit(x, y, p=1, compute_interdistances=True):
 
     def compute_dist(x, y, p):
