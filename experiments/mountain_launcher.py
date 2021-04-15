@@ -19,6 +19,7 @@ class Launcher(TmuxLauncher):
         return [
             opt.specify(
                 name="mountain_default",
+                lambda_patch_R1=10.0,
             ),
         ]
 

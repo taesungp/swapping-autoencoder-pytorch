@@ -148,6 +148,10 @@ To start from scratch, remove the checkpoint, or specify `continue_train=False` 
 - `options/__init__.py`: contains basic option flags. BUT many important flags are spread out over files, such as `swapping_autoencoder_model.py` or `generator.py`. When the program starts, these options are all parsed together. The best way to check the used option list is to run the training script, and look at the console output of the configured options.
 - `util/iter_counter.py`: contains iteration counting.
 
+## Change Log
+
+- 4/14/2021: The configuration to train the pretrained model on the Mountains dataset had not been set correctly, and was updated accordingly. 
+
 ## Bibtex
 If you use this code for your research, please cite our paper:
 ```
