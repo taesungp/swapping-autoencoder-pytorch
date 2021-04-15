@@ -73,8 +73,11 @@ if __name__ == "__main__":
     elif cmd == "train":
         assert len(ids) == 1, '%s is invalid for run command' % (' '.join(opt.id))
         expid = ids[0]
-        if not expid.isnumeric():
-            expid = instance.find_tag(instance.train_options(), expid)
+        for expid in ids:
+            if type(expid) == str and (not expid.isnumeric()):
+                expid = instance.find_tag(instance.train_options(), expid)
+            else:
+                expid = int(expid)
         instance.run_command(instance.commands(), expid,
                              continue_train=opt.continue_train,
                              gpu_id=opt.gpu_id)
@@ -82,11 +85,13 @@ if __name__ == "__main__":
         instance.launch(ids, test=True)
     elif cmd == "test":
         test_commands = instance.test_commands()
-        if ids == "all":
+        if "all" in ids and len(ids) == 1:
             ids = list(range(len(test_commands)))
         for expid in ids:
-            if not expid.isnumeric():
+            if type(expid) == str and (not expid.isnumeric()):
                 expid = instance.find_tag(instance.test_options(), expid)
+            else:
+                expid = int(expid)
             instance.run_command(test_commands, expid, opt.resume_iter,
                                  gpu_id=opt.gpu_id)
             if expid < len(ids) - 1:
