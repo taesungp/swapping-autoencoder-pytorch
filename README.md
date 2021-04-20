@@ -90,8 +90,8 @@ The reference images are randomly selected from the val set of LSUN, FFHQ, and t
 
 Replace the path to the test images at `dataroot="./testphotos/church/fig5_tab2/"` field of the script `experiments/church_pretrained_launcher.py`, and run
 ```bash
-python -m experiments church_pretrained run_test swapping_for_eval
-python -m experiments ffhq1024_pretrained run_test swapping_for_eval
+python -m experiments church_pretrained test swapping_for_eval
+python -m experiments ffhq1024_pretrained test swapping_for_eval
 ```
 
 The results can be viewed at `./results` (that can be changed using `--result_dir` option).
