@@ -25,7 +25,7 @@ UC Berkeley and Adobe Research
 
 - CUDA 10.1 or newer is required because it uses a custom CUDA kernel of [StyleGAN2](https://github.com/NVlabs/stylegan2/), ported by [@rosinality](https://github.com/rosinality/stylegan2-pytorch)
 - The author used PyTorch 1.7.1 on Python 3.6
-- Install dependencies with `pip install dominate torchgeometry func-timeout tqdm matplotlib opencv_python lmdb numpy GPUtil Pillow scikit-learn visdom`
+- Install dependencies with `pip install dominate torchgeometry func-timeout tqdm matplotlib opencv_python lmdb numpy GPUtil Pillow scikit-learn visdom ninja`
 
 ## Testing and Evaluation.
 
