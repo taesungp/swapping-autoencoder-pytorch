@@ -54,8 +54,7 @@ class IterationCounter():
         self.steps_so_far += self.batch_size
 
     def needs_saving(self):
-        return self.completed_training() or \
-            (self.steps_so_far % self.opt.save_freq) < self.batch_size
+        return (self.steps_so_far % self.opt.save_freq) < self.batch_size
 
     def needs_evaluation(self):
         return (self.steps_so_far >= self.opt.evaluation_freq) and \

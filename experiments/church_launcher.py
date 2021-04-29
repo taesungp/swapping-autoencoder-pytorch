@@ -20,12 +20,6 @@ class Launcher(TmuxLauncher):
                 name="church_default",
                 patch_use_aggregation=False,
             ),
-            opt.specify(
-                name="church_conservative",
-                patch_use_aggregation=False,
-                lambda_patch_R1=10.0,
-                resume_iter="24950k",
-            ),
         ]
 
     def train_options(self):
@@ -45,7 +39,7 @@ class Launcher(TmuxLauncher):
         return [opt.tag("fig4").specify(
             num_gpus=1,
             batch_size=1,
-            dataroot="~/datasets/testphotos/images_used_in_swapping_autoencoder_arxiv/church/fig4",
+            dataroot="./testphotos/church/fig4",
             dataset_mode="imagefolder",
             preprocess="scale_shortside",  # For testing, scale but don't crop
             evaluation_metrics="structure_style_grid_generation",

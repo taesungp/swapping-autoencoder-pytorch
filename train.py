@@ -51,4 +51,5 @@ while not iter_counter.completed_training():
 
         iter_counter.record_one_iteration()
 
+optimizer.save(iter_counter.steps_so_far)
 print('Training finished.')
