@@ -125,7 +125,7 @@ python -m experiments church train church_default --gpu 01234567
 
 ```
 
-The training progress can be monitored using `visdom` at the port number specified by `--display_port`. The default is https://localhost:2004.
+The training progress can be monitored using `visdom` at the port number specified by `--display_port`. The default is https://localhost:2004. For reference, the training takes 14 days on LSUN Church 256px, using 4 V100 GPUs. 
 
 Additionally, a few swapping grids are generated using random samples of the training set.
 They are saved as webpages at `[checkpoints_dir]/[expr_name]/snapshots/`.
