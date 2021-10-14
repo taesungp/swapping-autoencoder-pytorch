@@ -31,6 +31,14 @@ class Launcher(TmuxLauncher):
             opt.specify(
                 name="ffhq1024_pretrained",
             ),
+            opt.specify(
+                name="ffhq1024_patchDv7_L1_smallerstructurecode",
+                netE_num_downsampling_sp=6,
+                netE_scale_capacity=1.0,
+                netE_nc_steepness=1.8,
+                global_code_ch=1024,
+                spatial_code_ch=64,
+            ),
         ]
 
     def train_options(self):
@@ -41,7 +49,7 @@ class Launcher(TmuxLauncher):
             evaluation_freq=50000) for opt in common_options]
         
     def test_options(self):
-        opt = self.options()[0]
+        opt = self.options()[1]
         return [
             # Fig 5 and Table 2 of Appendix
             # The selection of the images used for evaluation could not be
@@ -51,7 +59,8 @@ class Launcher(TmuxLauncher):
             opt.tag("swapping_for_eval").specify(
                 num_gpus=1,
                 batch_size=1,
-                dataroot="./testphotos/ffhq1024/fig5_tab2/",
+                dataroot="~/datasets/testphotos/images_used_in_swapping_autoencoder_arxiv/ffhq1024/fig5_tab2/",
+                #dataroot="./testphotos/ffhq1024/fig5_tab2/",
                 evaluation_metrics="swap_generation_from_arranged_result",
                 preprocess="resize", load_size=1024, crop_size=1024,
             )

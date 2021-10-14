@@ -191,6 +191,12 @@ class SwappingAutoencoderModel(BaseModel):
         sp, gl = self.E(real)
         rec = self.G(sp[:B // 2], gl[:B // 2])  # only on B//2 to save memory
         sp_mix = self.swap(sp)
+        
+        # record the error of the reconstructed images for monitoring purposes
+        metrics["L1_dist"] = self.l1_loss(rec, real[:B // 2])
+
+        if self.opt.lambda_L1 > 0.0:
+            losses["G_L1"] = metrics["L1_dist"] * self.opt.lambda_L1
 
         if self.opt.crop_size >= 1024:
             # another momery-saving trick: reduce #outputs to save memory
@@ -199,12 +205,6 @@ class SwappingAutoencoderModel(BaseModel):
             sp_mix = sp_mix[B // 2:]
 
         mix = self.G(sp_mix, gl)
-
-        # record the error of the reconstructed images for monitoring purposes
-        metrics["L1_dist"] = self.l1_loss(rec, real[:B // 2])
-
-        if self.opt.lambda_L1 > 0.0:
-            losses["G_L1"] = metrics["L1_dist"] * self.opt.lambda_L1
 
         if self.opt.lambda_GAN > 0.0:
             losses["G_GAN_rec"] = loss.gan_loss(

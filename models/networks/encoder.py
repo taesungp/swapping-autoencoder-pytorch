@@ -87,7 +87,7 @@ class StyleGAN2ResnetEncoder(BaseNetwork):
     def nc(self, idx):
         nc = self.opt.netE_nc_steepness ** (5 + idx)
         nc = nc * self.opt.netE_scale_capacity
-        # nc = min(self.opt.global_code_ch, int(round(nc)))
+        nc = min(self.opt.global_code_ch, int(round(nc)))
         return round(nc)
 
     def forward(self, x, extract_features=False):

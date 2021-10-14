@@ -31,6 +31,8 @@ UC Berkeley and Adobe Research
 
 We provide the pretrained models and also several images that reproduce the figures of the paper. Please download and unzip them [here (2.1GB)](http://efrosgans.eecs.berkeley.edu/SwappingAutoencoder/swapping_autoencoder_models_and_test_images.zip). The scripts assume that the checkpoints are at `./checkpoints/`, and the test images at `./testphotos/`, but they can be changed by modifying `--checkpoints_dir` and `--dataroot` options.
 
+UPDATE: The pretrained model for the AFHQ dataset was added. Please download the models and samples images [here (256MB)](http://efrosgans.eecs.berkeley.edu/SwappingAutoencoder/afhq_models_and_test_images.zip).
+
 ### Swapping and Interpolation of the mountain model using sample images
 
 <img src='imgs/interpolation.png' width="1000px"/>
@@ -105,6 +107,7 @@ The FID is then computed between the swapped images and the original structure i
 - *LSUN Church and Bedroom* datasets can be downloaded [here](https://github.com/fyu/lsun). Once downloaded and unzipped, the directories should contain `[category]_[train/val]_lmdb/`.
 - [*FFHQ datasets*](https://github.com/NVlabs/ffhq-dataset) can be downloaded using this [link](https://drive.google.com/file/d/1WvlAIvuochQn_L_f9p3OdFdTiSLlnnhv/view?usp=sharing). This is the zip file of 70,000 images at 1024x1024 resolution. Unzip the files, and we will load the image files directly.
 - The *Flickr Mountains* dataset and the *Flickr Waterfall* dataset are not sharable due to license issues. But the images were scraped from [Mountains Anywhere](https://flickr.com/groups/62119907@N00/) and [Waterfalls Around the World](https://flickr.com/groups/52241685729@N01/), using the [Python wrapper for the Flickr API](https://github.com/alexis-mignon/python-flickr-api). Please contact [Taesung Park](http://taesung.me/) with title "Flickr Dataset for Swapping Autoencoder" for more details.
+- *AFHQ dataset* can be downloaded [here](https://github.com/clovaai/stargan-v2/blob/master/README.md#animal-faces-hq-dataset-afhq). 
 
 ### Training Scripts
 
@@ -151,6 +154,7 @@ To start from scratch, remove the checkpoint, or specify `continue_train=False` 
 ## Change Log
 
 - 4/14/2021: The configuration to train the pretrained model on the Mountains dataset had not been set correctly, and was updated accordingly. 
+- 10/14/2021: The 256x256 pretrained model for the AFHQ dataset was added. Please use `experiments/afhq_pretrained_launcher.py`. 
 
 ## Bibtex
 If you use this code for your research, please cite our paper:

@@ -5,20 +5,19 @@ class Launcher(TmuxLauncher):
     def options(self):
         opt = Options()
         opt.set(
-            dataroot="~/datasets/flickr/mountain/train",
+            dataroot="/mnt/localssd/datasets/afhq/afhq/train",
             dataset_mode="imagefolder",
             checkpoints_dir="./checkpoints/",
-            num_gpus=7, batch_size=14,
+            num_gpus=8, batch_size=32,
             # scale the image such that the short side is |load_size|, and
             # crop a square window of |crop_size|.
-            preprocess="scale_shortside_and_crop",
-            load_size=512, crop_size=512,
+            preprocess="resize",
+            load_size=256, crop_size=256,
         )
 
         return [
             opt.specify(
-                name="mountain_pretrained",
-                lambda_patch_R1=10.0,
+                name="afhq_pretrained",
             ),
         ]
 
@@ -36,13 +35,8 @@ class Launcher(TmuxLauncher):
             opt.tag("swapping_grid").specify(
                 num_gpus=1,
                 batch_size=1,
-                #dataroot="./testphotos/mountain/fig12/",
-                #dataset_mode="imagefolder",
-                #preprocess="scale_shortside",  # For testing, scale but don't crop
-                dataroot="~/datasets/testphotos/images_used_in_swapping_autoencoder_arxiv/mountain/fig12/",
+                dataroot="./testphotos/afhq/",
                 dataset_mode="imagefolder",
-                preprocess="scale_width",  # For testing, scale but don't crop
-                load_size=1024, crop_size=1024,
                 evaluation_metrics="structure_style_grid_generation"
             ),
             
@@ -51,13 +45,10 @@ class Launcher(TmuxLauncher):
                 num_gpus=1,
                 batch_size=1,
                 dataroot=".",  # dataroot is ignored.
-                result_dir="./results/",
-                preprocess="scale_shortside",
-                load_size=512,
                 evaluation_metrics="simple_swapping",
                 # Specify the two images here.
-                input_structure_image="./testphotos/mountain/fig12/structure/AdobeStock_104191871.jpeg",
-                input_texture_image="./testphotos/mountain/fig12/style/AdobeStock_312564332.jpeg",
+                input_structure_image="./testphotos/afhq/structure/flickr_dog_000846.jpg",
+                input_texture_image="./testphotos/afhq/style/flickr_wild_001319.jpg",
                 # alpha == 1.0 corresponds to full swapping.
                 # 0 < alpha < 1 means interpolation
                 texture_mix_alpha=1.0,
@@ -68,13 +59,10 @@ class Launcher(TmuxLauncher):
                 num_gpus=1,
                 batch_size=1,
                 dataroot=".",  # dataroot is ignored.
-                result_dir="./results/",
-                preprocess="scale_shortside",
-                load_size=512,
                 evaluation_metrics="simple_swapping",
                 # Specify the two images here.
-                input_structure_image="./testphotos/mountain/fig12/structure/AdobeStock_104191871.jpeg",
-                input_texture_image="./testphotos/mountain/fig12/style/AdobeStock_312564332.jpeg",
+                input_structure_image="./testphotos/afhq/structure/flickr_dog_000846.jpg",
+                input_texture_image="./testphotos/afhq/style/flickr_wild_001319.jpg",
                 texture_mix_alpha='0.0 0.25 0.5 0.75 1.0',
             )
         ]

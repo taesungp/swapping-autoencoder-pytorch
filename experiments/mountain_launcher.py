@@ -36,9 +36,10 @@ class Launcher(TmuxLauncher):
             opt.tag("swapping_grid").specify(
                 num_gpus=1,
                 batch_size=1,
-                dataroot="./testphotos/mountain/fig12/",
+                dataroot="~/datasets/testphotos/images_used_in_swapping_autoencoder_arxiv/mountain/fig12/",
                 dataset_mode="imagefolder",
-                preprocess="scale_shortside",  # For testing, scale but don't crop
+                preprocess="scale_width",  # For testing, scale but don't crop
+                load_size=1024, crop_size=1024,
                 evaluation_metrics="structure_style_grid_generation"
             ),
         ]
