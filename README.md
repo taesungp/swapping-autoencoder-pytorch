@@ -4,6 +4,8 @@
 
 UC Berkeley and Adobe Research
 
+NeurIPS 2020
+
 ![teaser](https://taesung.me/SwappingAutoencoder/index_files/teaser_v3.jpg)
 <p float="left">
   <img src="https://taesung.me/SwappingAutoencoder/index_files/church_style_swaps.gif" height="190" />
