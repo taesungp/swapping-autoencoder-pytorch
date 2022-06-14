@@ -31,9 +31,9 @@ NeurIPS 2020
 
 ## Testing and Evaluation.
 
-We provide the pretrained models and also several images that reproduce the figures of the paper. Please download and unzip them [here (2.1GB)](http://efrosgans.eecs.berkeley.edu/SwappingAutoencoder/swapping_autoencoder_models_and_test_images.zip). The scripts assume that the checkpoints are at `./checkpoints/`, and the test images at `./testphotos/`, but they can be changed by modifying `--checkpoints_dir` and `--dataroot` options.
+We provide the pretrained models and also several images that reproduce the figures of the paper. Please download and unzip them [here (2.1GB)](http://efrosgans.eecs.berkeley.edu/SwappingAutoencoder/swapping_autoencoder_models_and_test_images.zip) (Note: this is a http (not https) address, and you may need to paste in the link URL directly in the address bar for some browsers like Chrome, or download the dataset using `wget`). The scripts assume that the checkpoints are at `./checkpoints/`, and the test images at `./testphotos/`, but they can be changed by modifying `--checkpoints_dir` and `--dataroot` options.
 
-UPDATE: The pretrained model for the AFHQ dataset was added. Please download the models and samples images [here (256MB)](http://efrosgans.eecs.berkeley.edu/SwappingAutoencoder/afhq_models_and_test_images.zip).
+UPDATE: The pretrained model for the AFHQ dataset was added. Please download the models and samples images [here (256MB)](http://efrosgans.eecs.berkeley.edu/SwappingAutoencoder/afhq_models_and_test_images.zip) (Note: again, you may need to paste in the link URL directly in the address bar).
 
 ### Swapping and Interpolation of the mountain model using sample images
 
